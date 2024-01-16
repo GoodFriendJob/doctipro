@@ -176,6 +176,51 @@ class WebsiteController extends Controller
             return redirect()->back()->withErrors(__('Oops...user not found..!!'));
     }
 
+    //updated by Polaris
+    public function autocomplete_doctor(Request $request)
+    {
+        $setting = Setting::first();
+        $currency = $setting->currency_symbol;
+
+        $category = Category::with(['treatment'])->whereStatus(1);
+        $doctor = Doctor::with(['treatment', 'category', 'expertise'])->whereStatus(1)->where('is_filled', 1)->whereSubscriptionStatus(1);
+        $data = $request->all();
+        $getSet = 0;
+        if (isset($data['search_doctor']) && $data['search_doctor'] != '') {
+            $category->where('name', 'LIKE', '%' . $data['search_doctor'] . "%");
+            $doctor->where('name', 'LIKE', '%' . $data['search_doctor'] . "%");
+        } 
+        $categories = $category->orderBy('name', 'asc')->take(5)->get();
+        $result = $categories->map(function ($d) {
+            return [
+                'type' => 'category',
+                'name' => $d->name,
+                'img' => $d->image,
+                'href' => '',
+                'category' => $d->treatment->name,
+            ];
+        });
+        
+        $doctors = $doctor->orderBy('name', 'asc')->take(5)->get();
+        foreach ($doctors as $doctor) {
+            $hospitals = (new CustomController)->getHospital($doctor['id']);
+            $hospital_str = '';
+            foreach($hospitals as $hospital) {
+                $hospital_str = $hospital['name'] . ', ' . $hospital_str;
+            }
+            $slug = str_replace(" ", "-", $doctor->name);
+            $slug = strtolower(preg_replace('/[^\w\d\-\_]/i', '', $slug));
+            $result[] =[
+                'type' => 'doctor',
+                'name' => $doctor->name,
+                'img' => $doctor->image,
+                'href'=> '/doctor-profile/'.$doctor->id.'/'.$slug,
+                'category' => optional($doctor->category)->name . '<span><i class="fa-solid fa-house-medical"></i> ' . $hospital_str . ' </span>',
+            ];
+        }
+        return response()->json(['success' => true, 'data' => $result, 'currency' => $currency]);
+    }
+
     public function doctor(Request $request)
     {
         $setting = Setting::first();
@@ -194,7 +239,14 @@ class WebsiteController extends Controller
                 $doctor->hospital = (new CustomController)->getHospital($doctor['id']);
             }
         } elseif (isset($data['search_doctor']) && $data['search_doctor'] != '') {
-            $doctor->where('name', 'LIKE', '%' . $data['search_doctor'] . "%");
+            $searchText = $data['search_doctor'];
+            if (isset($data['search_type']) && $data['search_type'] == 'doctor') {
+                $doctor->where('name', 'LIKE', '%' . $searchText . "%");
+            } else {
+                $doctor->whereHas('category', function ($query) use ($searchText) {
+                    $query->where('name', 'like', '%' . $searchText . '%');
+                });
+            }
         } elseif (isset($data['gender_type']) && $data['gender_type'] != '') {
             $doctor->where('gender', $data['gender_type']);
         } elseif (isset($data['category'])) {

@@ -4,7 +4,6 @@
     <script src="{{ url('assets_admin/js/jquery.min.js')}}"></script>
     @include('layout.partials.head_admin')
 </head>
-
 <body>
     <div id="app">
         @if (Auth::check())

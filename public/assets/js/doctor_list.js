@@ -1,6 +1,76 @@
 var base_url = $('input[name=base_url]').val();
 
 $(document).ready(function () {
+    //updated by Polaris
+    var projects = [
+        {
+          value: "jquery",
+          label: "jQuery",
+          desc: "the write less, do more, JavaScript library",
+          icon: "jquery_32x32.png"
+        },
+        {
+          value: "jquery-ui",
+          label: "jQuery UI",
+          desc: "the official user interface library for jQuery",
+          icon: "jqueryui_32x32.png"
+        },
+        {
+          value: "sizzlejs",
+          label: "Sizzle JS",
+          desc: "a pure-JavaScript CSS selector engine",
+          icon: "sizzlejs_32x32.png"
+        }
+      ];
+    $("#search_doctor").autocomplete({
+        minLength: 1,
+        source: function( request, response ) {
+            $.ajax( {
+                headers:
+                {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                data:{
+                    search_doctor: request.term
+                },
+                url: base_url + '/autocomplete-doctors',
+                dataType: "json",
+                success: function( data ) {
+                    response( data.data );
+                }
+            });
+        },
+        focus: function( event, ui ) {
+            console.log('===focus==', ui.item.name);
+          $( "#search_doctor" ).val( ui.item.name );
+          return false;
+        },
+        select: function( event, ui ) {
+            console.log('===select==', ui);
+          $( "#search_doctor" ).val( ui.item.name );
+          $( "#search_type" ).val( ui.item.type );
+          return false;
+        }
+      })
+      .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        var searchInput = $( "#search_doctor" ).val();
+        var emphasizedText = item.name.replace(new RegExp(searchInput, 'gi'), function(match) {
+            return '<b>' + match + '</b>';
+        });
+        if (item.type=='doctor') {
+            return $( "<li>" )
+            .append( "<a class='atc-box' href='"+base_url+item.href+"'><div class='atc-img'><img src='"+base_url+'/images/upload/'+item.img+"'/></div><div class='atc-desc'><div class='atc-title'>" + emphasizedText + "</div><div class='atc-categ'>" + item.category + "</div></div></a>" )
+            .appendTo( ul );
+        } else {
+            return $( "<li>" )
+            .append( "<div class='atc-box'><div class='atc-title'>" + emphasizedText + "</div><div class='atc-categ'>" + item.category + "</div></div>" )
+            .appendTo( ul );
+        }
+        
+      };
+
+
     var page = 1;
     $("#more-doctor").click(function ()
     {

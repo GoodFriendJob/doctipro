@@ -1,6 +1,8 @@
 @extends('layout.mainlayout', ['activePage' => 'doctors'])
 
 @section('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+    <link rel="stylesheet" href="{{ url('assets/plugins/jquery-ui/jquery-ui.min.css') }}">
     <style>
         .mainDiv .hoverDoc {
             display: none;
@@ -14,7 +16,99 @@
         .mainDiv1 {
             display: block;
         }
-    </style>
+        ul.ui-autocomplete {
+            background-color: rgb(255, 255, 255);
+            box-sizing: border-box;
+            left: 0px;
+            position: absolute;
+            /* width: 100%; */
+            width: 288px !important;
+            z-index: 99;
+            --webkit-overflow-scrolling: touch;
+            box-shadow: none;
+            overflow-y: auto;
+            padding: 11px 0px 52px;
+            height: 100%;
+        }
+        .atc-box {
+            background: none;
+            cursor: pointer;
+            padding: 3px 12px;
+            transition: all 0.2s ease-in-out 0s;
+            display:block;
+            overflow: hidden;
+        }
+        .atc-img {
+            border-color: white;
+            border-radius: 50%;
+            height: 40px;
+            margin-top: 1px;
+            overflow: hidden;
+            position: absolute;
+        }
+        .atc-img img {
+            max-width: 100%;
+            height: auto;
+            -ms-interpolation-mode: bicubic;
+            display: inline-block;
+            vertical-align: middle;
+            width: 40px;
+        }
+        .atc-desc {
+            padding-left: 50px;
+            padding-top: 4px;
+        }
+        .atc-title {
+            color: #333333;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-transform: none;
+            padding: 0px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-size-adjust: none;
+        }
+        .atc-categ {
+            color: #707070;
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0em;
+            text-transform: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-size-adjust: none;
+            white-space: nowrap;
+        }
+        .atc-title b {
+            color: #ff7467 !important;
+        }
+        .atc-categ span {
+            margin-left:4px;
+            display:inline-block;
+            padding-left:3px;
+            color:#184394;
+        }
+        .ui-widget-content .ui-state-active {
+            border:none !important;
+            background: #e2e2e2 !important;
+            color:#111 !important;
+            margin:0 !important;
+        }
+        @media screen and (min-width: 768px) {
+            ul.ui-autocomplete {
+                padding-bottom: 8px;
+                height: auto;
+                border-top: 1px solid #e2e2e2;
+                border-bottom: 1px solid #cecece;
+                max-height: 496px;
+                /* min-width: 532px; */
+            }
+            .atc-box {
+                padding: 4px 25px;
+            }
+        }
 @endsection
 
 @section('content')
@@ -35,7 +129,8 @@
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <input type="search" name="search_doctor" class="block p-2 pl-10 text-sm text-black-700 bg-white-50 border border-white-light 2xl:w-96 xmd:w-72 !sm:w-32 msm:w-40 h-12" placeholder="{{ __('Search Doctor...') }}">
+                    <input type="search" id="search_doctor" name="search_doctor" class="block p-2 pl-10 text-sm text-black-700 bg-white-50 border border-white-light 2xl:w-96 xmd:w-72 !sm:w-32 msm:w-40 h-12" placeholder="{{ __('Search Specialist & Doctor...') }}" />
+                    <input type="hidden" id="search_type" name="search_type" value="spec" />
                 </div>
                 <div class="relative">
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -93,11 +188,11 @@
                             </label>
                         </div>
                     </div>
-                    <div>
+                    <!-- <div>
                         <h1 class="font-fira-sans font-medium text-base leading-5 text-black-dark mt-5">
                             {{ __('Select Specialist') }}
                         </h1>
-                        @foreach ($categories as $category)
+                        /* @foreach ($categories as $category)
                             <div class="form-check p-1">
                                 <input name="select_specialist"
                                     class="form-check-input appearance-none h-4 w-4 border border-white-light rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
@@ -108,8 +203,8 @@
                                     {{ $category->name }}
                                 </label>
                             </div>
-                        @endforeach
-                    </div>
+                        @endforeach */
+                    </div> -->
                 </form>
             </div>
 
@@ -141,5 +236,6 @@
 @section('js')
     <script src="https://maps.googleapis.com/maps/api/js?key={{ App\Models\Setting::first()->map_key }}&sensor=false&libraries=places">
     </script>
+    <script src="{{ url('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ url('assets/js/doctor_list.js') }}"></script>
 @endsection

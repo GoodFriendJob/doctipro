@@ -73,6 +73,7 @@ Route::group(['middleware' => ['XssSanitizer']], function ()
 {
     Route::get('/',[WebsiteController::class,'index']);
     Route::any('/show-doctors',[WebsiteController::class,'doctor']);
+    Route::post('/autocomplete-doctors',[WebsiteController::class,'autocomplete_doctor']);
     Route::get('/doctor-profile/{id}/{name}',[WebsiteController::class,'doctor_profile']);
     Route::any('/all-pharmacies',[WebsiteController::class,'pharmacy']);
     Route::any('/all-labs',[WebsiteController::class,'labs']);
