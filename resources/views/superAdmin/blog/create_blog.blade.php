@@ -16,15 +16,6 @@
                 <div class="card-body">
                     @php
                     $languages = App\Models\Language::where('status', 1)->get();
-                    $icon = \App\Models\Language::where('name',session('locale'))->first();
-                    if($icon)
-                    {
-                        $lang_image = $icon->image;
-                    }
-                    else
-                    {
-                        $lang_image = "english.png";
-                    }
                     @endphp
                     <div class="tab-content">
                         <div class="row">
