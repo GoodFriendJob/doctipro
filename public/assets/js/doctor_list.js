@@ -28,6 +28,7 @@ $(document).ready(function () {
         select: function( event, ui ) {
           $( "#search_doctor" ).val( ui.item.name );
           $( "#search_type" ).val( ui.item.type );
+          $('#gender_all').trigger('click');
           searchDoctor();
           return false;
         }
