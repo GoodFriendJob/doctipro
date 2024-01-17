@@ -90,6 +90,12 @@
             padding-left:3px;
             color:#184394;
         }
+        .bg-primary {
+            background-color: #184394;
+        }
+        [type='radio']:checked {
+            background-color: #184394 !important;
+        }
         .ui-widget-content .ui-state-active {
             border:none !important;
             background: #e2e2e2 !important;
@@ -143,8 +149,7 @@
                     <input type="hidden" name="doc_lat">
                     <input type="hidden" name="doc_lang">
                 </div>
-                <button type="button" onclick="searchDoctor()" data-te-ripple-init data-te-ripple-color="light" class="text-white bg-primary text-center px-6 py-2 text-base font-normal leading-5 font-fira-sans sm:w-32 msm:w-32 xsm:w-32 xxsm:w-32 h-12"><i
-                        class="fa-solid fa-magnifying-glass"></i> {{ __('Search') }}</button>
+                <button type="button" onclick="searchDoctor()" data-te-ripple-init data-te-ripple-color="light" class="text-white bg-primary text-center px-6 py-2 text-base font-normal leading-5 font-fira-sans sm:w-32 msm:w-32 xsm:w-32 xxsm:w-32 h-12"><i class="fa-solid fa-magnifying-glass"></i> &nbsp;{{ __('Search') }}</button>
             </div>
         </form>
     </div>
