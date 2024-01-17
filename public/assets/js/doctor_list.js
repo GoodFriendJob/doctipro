@@ -42,7 +42,6 @@ $(document).ready(function () {
             });
         },
         focus: function( event, ui ) {
-            console.log('===focus==', ui.item.name);
           $( "#search_doctor" ).val( ui.item.name );
           return false;
         },
@@ -50,6 +49,7 @@ $(document).ready(function () {
             console.log('===select==', ui);
           $( "#search_doctor" ).val( ui.item.name );
           $( "#search_type" ).val( ui.item.type );
+          searchDoctor();
           return false;
         }
       })
