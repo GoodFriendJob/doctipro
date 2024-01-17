@@ -27,22 +27,41 @@
     @if(count($blogs) > 0)
     <div class="grid grid-cols-1 sm:grid-cols-2 xmd:grid-cols-3 gap-10 xxsm:mx-5 xl:mx-0 2xl:mx-0 disBlog">
         @foreach ($blogs as $blog)
+        @php
+        //updated by Polaris
+        $tlist = json_decode($blog->multi_language);
+        $temp_title = $blog->title;
+        $temp_desc = $blog->desc;
+        foreach ($tlist as $t) {
+            if (strcmp($t->lang, session('locale'))==0) {
+                $temp_title = $t->title;
+                $temp_desc = $t->desc;
+            }
+        }
+        @endphp
         <a href="{{ url('blog-details/'.$blog->id.'/'.Str::slug($blog->title)) }}">
             <div class="md:mt-5 sm:mt-11 msm:mt-11 xsm:mt-11 xxsm:mt-11 w-full">
                 <img class="lg:h-60 lg:w-full bg-cover object-cover" src="{{asset($blog->fullImage)}}" alt="" />
                 <div class="text-gray text-left font-medium text-base py-2 leading-5 font-fira-sans flex">
-                    @if (strlen($blog->title) > 30)
+                    @if (strlen($temp_title) > 30)
                     <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">{!!
-                        substr(clean($blog->title),0,30) !!}....</div>
+                        substr(clean($temp_title),0,30) !!}....</div>
                     @else
                     <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">{!!
-                        clean($blog->title) !!}</div>
+                        clean($temp_title) !!}</div>
                     @endif
                     {{ Carbon\Carbon::parse($blog->created_at)->format('d M,Y') }}
                 </div>
                 <p class="font-fira-sans font-normal text-xl leading-6 text-black text-left">{{ $blog->blog_ref }}</p>
-                <div class="leading-4 font-fira-sans font-normal text-sm text-gray text-left h-28 overflow-hidden">{!!
-                    $blog->desc !!}</div>
+                <div class="leading-4 font-fira-sans font-normal text-sm text-gray text-left h-28 overflow-hidden">
+                    @if (strlen($temp_desc) > 190)
+                    <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">
+                        {!! substr(clean($temp_desc),0,190) !!}....</div>
+                    @else
+                    <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">
+                        {!! clean($temp_desc) !!}</div>
+                    @endif
+                </div>
             </div>
         </a>
         @endforeach

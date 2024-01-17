@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,7 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $request->validate([
             'title' => 'bail|required',
             'blog_ref' => 'bail|required',
@@ -58,6 +60,19 @@ class BlogController extends Controller
         else
         {
             $data['image'] = 'prod_default.png';
+        }
+        //updated by Polaris
+        if (isset($data['title_lang']) && isset($data['desc_lang'])) {
+            $languages = Language::whereStatus(1)->get();
+            $t = array();
+            for ($i=0; $i<count($languages); $i++) {
+                array_push($t, array(
+                    'lang'=>$languages[$i]['name'],
+                    'title'=>$data['title_lang'][$i],
+                    'desc'=>$data['desc_lang'][$i],
+                ));
+            }
+            $data['multi_language'] = json_encode($t);
         }
         Blog::create($data);
         return redirect('blog')->withStatus(__('Blog created successfully..!!'));
@@ -110,6 +125,19 @@ class BlogController extends Controller
         {
             (new CustomController)->deleteFile($blog->image);
             $data['image'] = (new CustomController)->imageUpload($request->image);
+        }
+        //updated by Polaris
+        if (isset($data['title_lang']) && isset($data['desc_lang'])) {
+            $languages = Language::whereStatus(1)->get();
+            $t = array();
+            for ($i=0; $i<count($languages); $i++) {
+                array_push($t, array(
+                    'lang'=>$languages[$i]['name'],
+                    'title'=>$data['title_lang'][$i],
+                    'desc'=>$data['desc_lang'][$i],
+                ));
+            }
+            $data['multi_language'] = json_encode($t);
         }
         $blog->update($data);
         return redirect('blog')->withStatus(__('Blog updated successfully..!!'));

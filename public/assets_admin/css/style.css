@@ -1749,6 +1749,12 @@ a.dropdown-item {
 .dropdown-divider {
   border-top-color: #f9f9f9; }
 
+.dropdown-item-desc {
+  line-height: 200%;
+}
+.dropdown-item-desc.active {
+  background:#0da8ee;
+}
 .dropdown-list {
   width: 350px;
   padding: 0; }

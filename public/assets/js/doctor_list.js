@@ -187,7 +187,7 @@ function searchDoctor()
             });
         },
         error: function (err) {
-            $('.dispDoctor').html('<h3 class="text-center">No Data Avalaible</h3>');
+            $('.dispDoctor').html('<h3 class="text-center">Network Error</h3>');
         }
     });
 }

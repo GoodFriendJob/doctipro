@@ -2,7 +2,24 @@
 
 @section('title',__('Edit Blog'))
 @section('content')
-
+@php
+$languages = App\Models\Language::where('status', 1)->get();
+$title_array = array();
+$desc_array = array();
+$tlist = json_decode($blog->multi_language);
+foreach ($languages as $index=>$language) {
+    $temp_title = $blog->title;
+    $temp_desc = $blog->desc;
+    foreach ($tlist as $t) {
+        if (strcmp($t->lang, $language['name'])==0) {
+            $temp_title = $t->title;
+            $temp_desc = $t->desc;
+        }
+    }
+    array_push($title_array, $temp_title);
+    array_push($desc_array, $temp_desc);
+}
+@endphp
 <section class="section">
 
     <section class="section">
@@ -18,7 +35,7 @@
                     @method('PUT')
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-2 col-md-4">
+                            <div class="col-lg-3 col-md-4">
                                 <label for="category_image" class="col-form-label"> {{__('Blog image')}}</label>
                                 <div class="avatar-upload avatar-box avatar-box-left">
                                     <div class="avatar-edit">
@@ -36,7 +53,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="col-lg-10 col-md-8">
+                            <div class="col-lg-9 col-md-8">
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Blog Title')}}</label>
                                     <input type="text" value="{{ $blog->title }}" name="title" class="form-control @error('title') is-invalid @enderror">
@@ -46,6 +63,18 @@
                                     </div>
                                     @enderror
                                 </div>
+                                @foreach ($languages as $index=>$language)
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <img width="25px" height="15px" alt="image" src="{{asset('/images/upload/'.$language->image)}}">
+                                            &nbsp; {{ $language->name }}
+                                        </span>
+                                    </div>
+                                    <input type="text" name="title_lang[]" value="{{ $title_array[$index] }}" id="title_lang_{{ Str::slug($language->name) }}" class="form-control" placeholder="{{__('Blog Title')}}" aria-label="{{__('Blog Title')}}">
+                                </div>
+                                <br>
+                                @endforeach
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Blog Reference')}}</label>
                                     <input type="text" value="{{ $blog->blog_ref }}" name="blog_ref" class="form-control @error('blog_ref') is-invalid @enderror">
@@ -66,6 +95,13 @@
                                 </div>
                             @enderror
                         </div>
+                        @foreach ($languages as $index=>$language)
+                        <div class="form-group mt-4">
+                            <label class="col-form-label">{{__('Content')}}</label> &nbsp; 
+                            ( <img width="25px" height="15px" alt="image" src="{{asset('/images/upload/'.$language->image)}}"> {{ $language->name }} )
+                            <textarea name="desc_lang[]" id="desc_lang_{{ Str::slug($language->name) }}" class="summernote form-control">{{ $desc_array[$index] }}</textarea>
+                        </div>
+                        @endforeach
                         <div class="row">
                             <div class="col-lg-6 form-group">
                                 <label class="col-form-label">{{__('Status')}}</label>
