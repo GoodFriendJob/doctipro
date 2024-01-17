@@ -233,12 +233,13 @@ class WebsiteController extends Controller
             $radius = $setting->radius;
             $hospital = Hospital::whereStatus(1)->GetByDistance($data['doc_lat'], $data['doc_lang'], $radius)->get(['id']);
             $doctor->whereIn('hospital_id', $hospital);
-            $doctors = $doctor->get()->values()->all();
-            foreach ($doctors as $doctor) {
-                $doctor['is_fav'] = $this->checkFavourite($doctor['id']);
-                $doctor->hospital = (new CustomController)->getHospital($doctor['id']);
-            }
-        } elseif (isset($data['search_doctor']) && $data['search_doctor'] != '') {
+            // $doctors = $doctor->get()->values()->all();
+            // foreach ($doctors as $doctor) {
+            //     $doctor['is_fav'] = $this->checkFavourite($doctor['id']);
+            //     $doctor->hospital = (new CustomController)->getHospital($doctor['id']);
+            // }
+        } 
+        if (isset($data['search_doctor']) && $data['search_doctor'] != '') {
             $searchText = $data['search_doctor'];
             if (isset($data['search_type']) && $data['search_type'] == 'doctor') {
                 $doctor->where('name', 'LIKE', '%' . $searchText . "%");
@@ -247,9 +248,11 @@ class WebsiteController extends Controller
                     $query->where('name', 'like', '%' . $searchText . '%');
                 });
             }
-        } elseif (isset($data['gender_type']) && $data['gender_type'] != '') {
+        } 
+        if (isset($data['gender_type']) && $data['gender_type'] != '') {
             $doctor->where('gender', $data['gender_type']);
-        } elseif (isset($data['category'])) {
+        }
+        if (isset($data['category'])) {
             $doctor->whereIn('category_id', $data['category']);
         }
         if (isset($data['treatment_id'])) {

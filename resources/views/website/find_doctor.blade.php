@@ -136,7 +136,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
                     <input type="search" id="search_doctor" name="search_doctor" class="block p-2 pl-10 text-sm text-black-700 bg-white-50 border border-white-light 2xl:w-96 xmd:w-72 !sm:w-32 msm:w-40 h-12" placeholder="{{ __('Search Specialist & Doctor...') }}" />
-                    <input type="hidden" id="search_type" name="search_type" value="spec" />
+                    <input type="hidden" id="search_type" name="search_type" value="category" />
                 </div>
                 <div class="relative">
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -174,6 +174,14 @@
                     <div class="mt-2">
                         <h1 class="font-fira-sans font-medium text-base leading-5 text-black-dark mt-5">{{ __('Gender') }}
                         </h1>
+                        <div class="form-check p-1">
+                            <input class=""
+                                name="gender_type" type="radio" value="" id="gender_all" checked>
+                            <label class="font-fira-sans form-check-label inline-block font-normal text-black text-sm leading-4"
+                                for="gender_all">
+                                {{ __('All') }}
+                            </label>
+                        </div>
                         <div class="form-check p-1">
                             <input class=""
                                 name="gender_type" type="radio" value="male" id="male">
