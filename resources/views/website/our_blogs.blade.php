@@ -31,11 +31,11 @@
         //updated by Polaris
         $tlist = json_decode($blog->multi_language);
         $temp_title = $blog->title;
-        $temp_desc = $blog->desc;
+        $temp_desc = strip_tags($blog->desc);
         foreach ($tlist as $t) {
             if (strcmp($t->lang, session('locale'))==0) {
                 $temp_title = $t->title;
-                $temp_desc = $t->desc;
+                $temp_desc = strip_tags($t->desc);
             }
         }
         @endphp
