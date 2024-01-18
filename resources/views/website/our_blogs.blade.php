@@ -55,11 +55,9 @@
                 <p class="font-fira-sans font-normal text-xl leading-6 text-black text-left">{{ $blog->blog_ref }}</p>
                 <div class="leading-4 font-fira-sans font-normal text-sm text-gray text-left h-28 overflow-hidden">
                     @if (strlen($temp_desc) > 190)
-                    <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">
-                        {!! substr(clean($temp_desc),0,190) !!}....</div>
+                        {!! substr(clean($temp_desc),0,190) !!}....
                     @else
-                    <div class="font-fira-sans text-primary text-base font-normal leading-5 md:text-sm">
-                        {!! clean($temp_desc) !!}</div>
+                        {!! clean($temp_desc) !!}
                     @endif
                 </div>
             </div>
