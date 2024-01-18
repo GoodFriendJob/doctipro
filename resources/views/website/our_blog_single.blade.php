@@ -21,7 +21,7 @@ foreach ($tlist as $t) {
 </div>
 
 {{-- Ayurveda For Prostate --}}
-<div class="xsm:mx-5 xlg:mx-20 pb-6">
+<div class="xsm:mx-14 xsxm:mx-5 pb-6">
     <div class="">
         <div class="pt-10">
             <h1 class="text-center font-fira-sans text-black font-medium text-4xl">{{ $temp_title }}</h1>
@@ -32,15 +32,13 @@ foreach ($tlist as $t) {
     </div>
 </div>
 {{-- full image --}}
-<div class="mb-10">
-    <div class="flex justify-center mb-10">
-        <img src="{{asset($blog->fullImage)}}" class="w-full object-fill xxsm:h-[200px] xsm:h-[300px] sm:h-[400px] xxmd:h-[500px] lg:h-[700px]" alt="Logo">
+<div class="border-b border-white-light mb-10">
+    <div class="flex justify-center">
+        <img src="{{asset($blog->fullImage)}}" class="w-[60%] object-cover bg-cover" alt="Logo">
     </div>
 
-    <div class="xl:w-3/4 mx-auto">
-        <div class="xxsm:mx-5 xl:mx-0 2xl:mx-0">
-            {!! $temp_desc !!}
-        </div>
+    <div class="xsm:mx-24 xsxm:mx-5 mb-10 py-10">
+        {!! $temp_desc !!}
     </div>
 </div>
 @endsection
