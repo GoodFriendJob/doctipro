@@ -13,7 +13,7 @@
             <div class="flex 2xl:flex-row xl:flex-row xlg:flex-row lg:flex-row xmd:flex-row md:flex-row sm:flex-row msm:flex-row xsm:flex-col xxsm:flex-col">
                 <div class="bg-white-50 2xl:w-60 xl:w-60 xlg:w-60 xl:h-80 xlg:h-80 lg:h-80 lg:w-60 xmd:w-52 xmd:h-72 md:w-full md:h-72 sm:w-full sm:h-72 msm:w-96 msm:h-72 xsm:w-full xsm:h-60 xxsm:w-full xxsm:h-60">
                     <div class="flex flex-col justify-center items-center xmd:mt-5 md:mt-10 lg:mt-10 sm:mt-14 msm:mt-10 xsm:mt-11 xxsm:mt-11">
-                        <img class="2xl:w-28  2xl:h-28 xlg:h-20 xlg:w-20 xl:h-20 xl:w-20 lg:h-20 lg:w-20 md:h-20 md:w-20 sm:h-20 sm:w-20 msm:w-20 msm:h-20 xsm:h-20 xsm:w-20 xxsm:h-20 xxsm:w-20 border border-primary rounded-full" src="{{ $doctor->full_image }}" alt="" />
+                        <img class="2xl:w-28  2xl:h-28 xlg:h-20 xlg:w-20 xl:h-20 xl:w-20 lg:h-20 lg:w-20 md:h-20 md:w-20 sm:h-20 sm:w-20 msm:w-20 msm:h-20 xsm:h-20 xsm:w-20 xxsm:h-20 xxsm:w-20 border border-primary object-cover bg-cover rounded-full" src="{{ $doctor->full_image }}" alt="" />
                         <h5 class="font-fira-sans font-normal text-xl leading-6 text-black-dark text-center md:text-md pt-5">
                             {{ $doctor->name }}
                         </h5>

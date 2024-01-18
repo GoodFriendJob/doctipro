@@ -154,10 +154,10 @@
         </form>
     </div>
 
-    <div class="xl:w-3/4 mx-auto">
-        <div class="flex pt-5 2xl:flex-row xl:flex-row xlg:flex-row lg:flex-row xmd:flex-row md:flex-row sm:flex-row xsm:flex-col xxsm:flex-col">
+    <div class="msm:mx-20 xsm:mx-0 xxsm:mx-0">
+        <div class="flex pt-5 2xl:flex-row xl:flex-row xlg:flex-row lg:flex-row xmd:flex-rowmd:flex-row sm:flex-row xsm:flex-col xxsm:flex-col">
             {{-- side bar --}}
-            <div class="2xl:w-1/4 xl:w-1/4 xlg:w-1/4 lg:w-1/4 sm:w-72 px-4 py-5">
+            <div class="2xl:w-1/4 xl:w-1/4 xlg:w-1/4 lg:w-1/4 sm:w:1/4 px-4 py-5">
                 <form id="filter_form" method="post">
                     <div class="flex justify-center">
                         <div class="w-full">
@@ -223,7 +223,7 @@
 
             <div class="w-full">
                 @if (count($doctors['data']) > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xlg:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 dispDoctor">
+                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xlg:grid-cols-3 dispDoctor">
                         @include('website.display_doctors', ['doctor' => $doctors])
                     </div>
                 @else
