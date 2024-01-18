@@ -44,7 +44,7 @@ $data = $doctors;
                         @if($loop->iteration <= 2) 
                             <p class="font-fira-sans font-medium text-base leading-5 text-black-dark text-left pt-2"><i class="fa-solid fa-house-medical"></i> {{ $hospital['name'] }}</p>
                             <p class="font-fira-sans font-normal text-sm leading-4 text-gray text-left pt-1">
-                                <span class="mr-2"><i class="fa-solid fa-location-dot"></i></span class="ml-2">{{ $hospital['address'] }}
+                                <span class="ml-6 mr-2"><i class="fa-solid fa-location-dot"></i></span class="ml-2">{{ $hospital['address'] }}
                             </p>
                         @else
                             <a href="{{ url('doctor-profile/'.$doctor['id'].'/'.Str::slug($doctor['name'])) }}">
