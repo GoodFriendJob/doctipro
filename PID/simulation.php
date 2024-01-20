@@ -980,7 +980,7 @@ function CanoniseBody2()
     </ns:RequestSecurityToken>
   </soapenv:Body>';
    
-     file_put_contents("BodyCNSCanonized.xml", $CanonizedBody);
+     file_put_contents("logs/BodyCNSCanonized.xml", $CanonizedBody);
 	
 	 return $CanonizedBody;
 }
@@ -1010,7 +1010,7 @@ function CanoniseBody3($varIdMemoireHonoraire,$varDateEtablissementMemoireHonora
     </sync:RequestInfo>
   </soapenv:Body>';
    
-  file_put_contents("BodyCNSBusiness.xml", $CanonizedBody);
+  file_put_contents("logs/BodyCNSBusiness.xml", $CanonizedBody);
   
   return $CanonizedBody;
 }
@@ -1027,7 +1027,7 @@ function canoniserSAMLresponse($dateIssueInstant,$id,$signatureValue,$x509cert,$
 {
 	  $samlCanonized = '<saml:Assertion xmlns:auth="http://schemas.xmlsoap.org/ws/2006/12/authorization" xmlns:ns="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" ID="'.$id.'" IssueInstant="'.$dateIssueInstant.'" Version="2.0"><saml:Issuer Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">https://www-integration.esante.lu/auth/realms/organization</saml:Issuer><dsig:Signature xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Id="'.$IdSignature.'"><dsig:SignedInfo><dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></dsig:CanonicalizationMethod><dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></dsig:SignatureMethod><dsig:Reference URI="#'.$id.'"><dsig:Transforms><dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></dsig:Transform><dsig:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></dsig:Transform></dsig:Transforms><dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></dsig:DigestMethod><dsig:DigestValue>'.$digestValue.'</dsig:DigestValue></dsig:Reference></dsig:SignedInfo><dsig:SignatureValue>'.$signatureValue.'</dsig:SignatureValue><dsig:KeyInfo Id="'.$keyInfoId.'"><dsig:X509Data><dsig:X509Certificate>'.$x509cert.'</dsig:X509Certificate></dsig:X509Data></dsig:KeyInfo></dsig:Signature><saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">C=LU,title=PS-001,SN=MIPIT,GN=TEST,serialNumber=2854201475,CN=TEST MIPIT,emailAddress=certificat@esante.lu</saml:NameID><saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"></saml:SubjectConfirmation></saml:Subject><saml:Conditions NotBefore="'.$notBefore.'" NotOnOrAfter="'.$notOnAfter.'"></saml:Conditions><saml:AttributeStatement><saml:Attribute Name="userCertificate" NameFormat="urn:vordel:attribute:1.0"><saml:AttributeValue>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</saml:AttributeValue></saml:Attribute><saml:Attribute Name="psMatricule" NameFormat="urn:vordel:attribute:1.0"><saml:AttributeValue>1970050299902</saml:AttributeValue></saml:Attribute><saml:Attribute Name="psEHealthID" NameFormat="urn:vordel:attribute:1.0"><saml:AttributeValue>2854201475</saml:AttributeValue></saml:Attribute></saml:AttributeStatement></saml:Assertion>';
 	   
-	file_put_contents("SamlCanonized.xml", $samlCanonized);
+	file_put_contents("logs/SamlCanonized.xml", $samlCanonized);
 	
 	return $samlCanonized;
 }
@@ -1036,7 +1036,7 @@ function GetCcssToken($CCss,$wsuId)
 	
 	$ccssToken = '<wsse:BinarySecurityToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" wsu:Id="'.$wsuId.'" ValueType="http://ws.mySecu.lu/trust/token/bst" EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">'.$CCss.'</wsse:BinarySecurityToken>';
 	
-	file_put_contents("ccssToken.xml", $ccssToken);
+	file_put_contents("logs/ccssToken.xml", $ccssToken);
 	
 	return $ccssToken;
 }
@@ -1129,7 +1129,7 @@ function CanoniseSignedInfoBusiness($digestBody)
           </ds:Reference>
         </ds:SignedInfo>';
 		
-	  file_put_contents("SignedInfoBusinessCall.xml", $signedinfo);
+	  file_put_contents("logs/SignedInfoBusinessCall.xml", $signedinfo);
 	  
 	  return $signedinfo;
 }

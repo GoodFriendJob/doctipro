@@ -232,7 +232,7 @@ function CanoniseBodyContestation($id,$idAnomalie)
   </soapenv:Body>';
  
      
-     file_put_contents("BodyCNSBusinessContestation.xml", $CanonizedBody);
+     file_put_contents("logs/BodyCNSBusinessContestation.xml", $CanonizedBody);
 	
 	 return $CanonizedBody;
 }
@@ -254,7 +254,7 @@ function CanoniseSignedInfoContestation($digestBody)
           </ds:Reference>
         </ds:SignedInfo>';
 				
-	  file_put_contents("SignedInfoBusinessCallValidate.xml", $signedinfo);
+	  file_put_contents("logs/SignedInfoBusinessCallValidate.xml", $signedinfo);
 	  
 	  return $signedinfo;
 }

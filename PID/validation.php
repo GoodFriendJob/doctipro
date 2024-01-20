@@ -245,7 +245,7 @@ function CanoniseBodyValidation($id)
   </soapenv:Body>';
  
      
-     file_put_contents("BodyCNSBusinessValidate.xml", $CanonizedBody);
+     file_put_contents("logs/BodyCNSBusinessValidate.xml", $CanonizedBody);
 	
 	 return $CanonizedBody;
 }
@@ -267,7 +267,7 @@ function CanoniseSignedInfoValidation($digestBody)
           </ds:Reference>
         </ds:SignedInfo>';
 				
-	  file_put_contents("SignedInfoBusinessCallValidate.xml", $signedinfo);
+	  file_put_contents("logs/SignedInfoBusinessCallValidate.xml", $signedinfo);
 	  
 	  return $signedinfo;
 }
