@@ -408,6 +408,12 @@
                 </a>
             </li>
             @endcan
+            <li class="{{ $activePage == 'pid' ? 'active' : '' }}">
+                <a href="{{ url('pid') }}">
+                    <i class="fa fa-credit-card"></i>
+                    <span>{{__('PID')}}</span>
+                </a>
+            </li>
             @endif
             @if (auth()->user()->hasRole('doctor'))
             @can('zoom_setting')

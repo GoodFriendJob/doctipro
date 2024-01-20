@@ -315,6 +315,9 @@ Route::group(['middleware' => ['XssSanitizer']], function ()
         // schedule
         Route::get('/schedule',[App\Http\Controllers\Doctor\DoctorController::class,'schedule']);
 
+        // pid
+        Route::get('/pid',[App\Http\Controllers\Doctor\DoctorController::class,'pid']);
+
         // doctor profile
         Route::get('/doctor_profile',[App\Http\Controllers\Doctor\DoctorController::class,'doctor_profile']);
         Route::post('/update_doctor_profile',[App\Http\Controllers\Doctor\DoctorController::class,'update_doctor_profile']);
