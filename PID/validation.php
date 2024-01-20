@@ -1,9 +1,10 @@
 <?php
 function validation($id_response_simulation,$CCss,$WsuID)
 {
+	global $db_host, $db_name, $db_user, $db_pass, $cert_path;
 	$pshealthid = '2854201475'; // Remplacez 'valeur_de_pshealthid' par la valeur réelle du pshealthid
 
-	$OPC = ConnexionBdd('localhost','doctro','root','');
+	$OPC = ConnexionBdd($db_host, $db_name, $db_user, $db_pass);
 
 	$info = getCertificatGuichet();
 	$privateKey = $info['privateKey'];
@@ -166,8 +167,8 @@ function validation($id_response_simulation,$CCss,$WsuID)
 	curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 	curl_setopt($ch, CURLOPT_URL, $service_url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');//ok
-	curl_setopt($ch, CURLOPT_CAINFO, 'certificats.pem');
+	curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');//ok
+	curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
 	curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -244,7 +245,7 @@ function CanoniseBodyValidation($id)
   </soapenv:Body>';
  
      
-     file_put_contents('logs/BodyCNSBusinessValidate.xml', $CanonizedBody);
+     file_put_contents("BodyCNSBusinessValidate.xml", $CanonizedBody);
 	
 	 return $CanonizedBody;
 }
@@ -266,7 +267,7 @@ function CanoniseSignedInfoValidation($digestBody)
           </ds:Reference>
         </ds:SignedInfo>';
 				
-	  file_put_contents('logs/SignedInfoBusinessCallValidate.xml', $signedinfo);
+	  file_put_contents("SignedInfoBusinessCallValidate.xml", $signedinfo);
 	  
 	  return $signedinfo;
 }

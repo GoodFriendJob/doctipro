@@ -1,7 +1,8 @@
 <?php
 function contestation($identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,$identifiantAnomalieVar)
 {
-	$OPC = ConnexionBdd('localhost','doctro','root','');
+	global $cert_path;
+	$OPC = ConnexionBdd('localhost','doctipro','doctipro_user','sMXNMDbpJoo1jyhF');
 
 	$wsuBodyId = 'id-8A64C6552EAFBF716616951123186195';
 	$sampleID = 'saml-dea5cdaee319ff3662a81ae1fea6936f';
@@ -166,8 +167,8 @@ function contestation($identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,
 	curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 	curl_setopt($ch, CURLOPT_URL, $service_url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');//ok
-	curl_setopt($ch, CURLOPT_CAINFO, 'certificats.pem');
+	curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');//ok
+	curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
 	curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -231,7 +232,7 @@ function CanoniseBodyContestation($id,$idAnomalie)
   </soapenv:Body>';
  
      
-     file_put_contents('logs/BodyCNSBusinessContestation.xml', $CanonizedBody);
+     file_put_contents("BodyCNSBusinessContestation.xml", $CanonizedBody);
 	
 	 return $CanonizedBody;
 }
@@ -253,7 +254,7 @@ function CanoniseSignedInfoContestation($digestBody)
           </ds:Reference>
         </ds:SignedInfo>';
 				
-	  file_put_contents('logs/SignedInfoBusinessCallValidate.xml', $signedinfo);
+	  file_put_contents("SignedInfoBusinessCallValidate.xml", $signedinfo);
 	  
 	  return $signedinfo;
 }

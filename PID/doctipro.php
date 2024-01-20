@@ -1,10 +1,9 @@
 <?php
-
-require 'simulation.php'; 
-require 'validation.php'; 
-require 'contestation.php'; 
-
-
+// echo __DIR__; exit;
+require_once 'config.php';
+require_once 'simulation.php'; 
+require_once 'validation.php'; 
+require_once 'contestation.php'; 
 
 $codeMedical = 'C1';
 $lieuPrestation = '01';
