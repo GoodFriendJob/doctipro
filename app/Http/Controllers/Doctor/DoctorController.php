@@ -194,6 +194,15 @@ class DoctorController extends Controller
         return view('doctor.doctor.doctor_schedule', compact('doctor'));
     }
 
+    public function pid()
+    {
+        echo 'test'; exit;
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
+        $doctor->workingHours = WorkingHour::where('doctor_id', $doctor->id)->get();
+        $doctor->firstHours = WorkingHour::where('doctor_id', $doctor->id)->first();
+        return view('doctor.doctor.doctor_pid', compact('doctor'));
+    }
+
     public function doctor_profile()
     {
         abort_if(Gate::denies('doctor_profile'), Response::HTTP_FORBIDDEN, '403 Forbidden');
