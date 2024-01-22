@@ -312,9 +312,9 @@ if (curl_errno($ch))
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     if ($httpCode == 500) {
-        // echo '============= Erreur 500 : ' . $response;
+        echo '============= Erreur 500 : ' . $response;
     } else {
-        // echo '=============  Réponse du serveur : ' . $response;
+        echo '=============  Réponse du serveur : ' . $response;
     }
 }
 file_put_contents('logs/responseGuichet.xml', $response);
