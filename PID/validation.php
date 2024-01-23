@@ -6,7 +6,7 @@ function validation($id_response_simulation,$CCss,$WsuID)
 
 	$OPC = ConnexionBdd($db_host, $db_name, $db_user, $db_pass);
 
-	$info = getCertificatGuichet();
+	$info = getCertificatGuichet($pshealthid_p12);
 	$privateKey = $info['privateKey'];
 	$publicCertWithoutTitle = $info['publicCertWithoutTitle'];
 
@@ -167,8 +167,8 @@ function validation($id_response_simulation,$CCss,$WsuID)
 	curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 	curl_setopt($ch, CURLOPT_URL, $service_url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');//ok
-	curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
+	curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');//ok
+	curl_setopt($ch, CURLOPT_CAINFO,  'certificats.pem');
 	curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -206,7 +206,7 @@ function validation($id_response_simulation,$CCss,$WsuID)
 	$montantPaye = $xpath->query('//cns:montantPaye');
 	
 		 
-	$req2 = $OPC->prepare("UPDATE pid 
+	$req2 = $OPC->prepare("UPDATE doctor_pid 
 		SET validation_xml = :validation_xml,
 			validation_response_xml =:validation_response_xml,part_statutaire=:part_statutaire,recouvrement=:recouvrement,paye=:paye,
 			validation_response_xml_date_added = NOW() 

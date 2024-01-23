@@ -353,8 +353,13 @@ class DoctorController extends Controller
         $data['end_time'] = Carbon::parse($data['end_time'])->format('h:i A');
         if($request->hasFile('image'))
         {
-            (new CustomController)->deleteFile($doctor->image);
+            (new CustomController)->imageUpload($doctor->image);
             $data['image'] = (new CustomController)->imageUpload($request->image);
+        }
+        if($request->hasFile('pshealthid_p12'))
+        {
+            (new CustomController)->ext_deleteFile("/uploads/doctor/ehealth_p12/", $doctor->pshealthid_p12);
+            $data['pshealthid_p12'] = (new CustomController)->ext_fileUpload("/uploads/doctor/ehealth_p12/", $request->pshealthid_p12);
         }
         $education = array();
         for ($i=0; $i < count($data['degree']); $i++)
@@ -392,7 +397,12 @@ class DoctorController extends Controller
                 }
             }
         }
-        $doctor->update($data);
+        try {
+            $doctor->update($data);
+        } catch (\Exception $e) {
+            // Log or handle the exception
+            dd($e->getMessage());
+        }
         return redirect('doctor')->withStatus(__('Doctor updated successfully..!!'));
     }
 

@@ -835,6 +835,29 @@ function display_timeslot(id)
         }
     });
 }
+
+function call_pid()
+{
+    $.ajax({
+        // headers:
+        // {
+        //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        // },
+        type: "POST",
+        url: base_url + '/PID/',
+        data: $('#request_pid_dlg .myform').serialize(),
+        success: function (result)
+        {
+           console.log(result);
+           location.href = location.href;
+        },
+        error: function (err) {
+
+        }
+    });
+}
+
+
 function edit_timeslot()
 {
     var id = $('input[name=working_id]').val();

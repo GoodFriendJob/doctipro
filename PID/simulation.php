@@ -2,42 +2,32 @@
 
 require 'functions.php';
 
-function simulation($psEHealthID,$code_prestataire,$codeMedical,$lieuPrestation,$varMatricule,$NombreActeMedical)
+function simulation($pshealthid_p12, $doctor_id, $psEHealthID, $code_prestataire,$codeMedical,$lieuPrestation,$varMatricule,$NombreActeMedical)
 {
-	global $db_host, $db_name, $db_user, $db_pass, $cert_path;
-$OPC = ConnexionBdd($db_host, $db_name, $db_user, $db_pass);
+	global $db_host, $db_name, $db_user, $db_pass;
+  $OPC = ConnexionBdd($db_host, $db_name, $db_user, $db_pass);
 
-/***********************paramètres****************************************/
-$codeMedical = 'C1';
-$lieuPrestation = '01';
-$varMatricule = '1900123456712';
-$NombreActeMedical = '1';
+  $info = getCertificatGuichet($pshealthid_p12);
+  $privateKey = $info['privateKey'];
+  $publicCertWithoutTitle = $info['publicCertWithoutTitle'];
 
-$code_prestataire="90813319";
-$psEHealthID = "2854201475";
+  $ch = curl_init();
+  $service_url = 'https://www-integration.esante.lu/SAML2Server/AuthenticationService';
 
-/***************************************************************************************************/
-$info = getCertificatGuichet();
-$privateKey = $info['privateKey'];
-$publicCertWithoutTitle = $info['publicCertWithoutTitle'];
-
-$ch = curl_init();
-$service_url = 'https://www-integration.esante.lu/SAML2Server/AuthenticationService';
-
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_URL, $service_url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');
-// curl_setopt($ch, CURLOPT_SSLKEYPASSWD, $client_key_password);
-curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
-// curl_setopt($ch, CURLOPT_VERBOSE, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: text/xml;charset=UTF-8',
-        'SOAPAction: "http://www.oasis-open.org/committees/securityhttp://www.oasis-open.org/committees/security"',
-    )
-);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+  curl_setopt($ch, CURLOPT_URL, $service_url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');
+  // curl_setopt($ch, CURLOPT_SSLKEYPASSWD, $client_key_password);
+  curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+  // curl_setopt($ch, CURLOPT_VERBOSE, true);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          'Content-Type: text/xml;charset=UTF-8',
+          'SOAPAction: "http://www.oasis-open.org/committees/securityhttp://www.oasis-open.org/committees/security"',
+      )
+  );
 
 $wsuTimestampId = 'TS-8A64C6552EAFBF716616951123185611';
 $wsuBinarySecurityTokenId = 'X509-8A64C6552EAFBF716616951123185992';
@@ -319,9 +309,10 @@ if (curl_errno($ch))
 }
 file_put_contents('logs/responseGuichet.xml', $response);
 
-	$req1 = $OPC->prepare("INSERT INTO pid(pshealthid,authentication_guichet_xml,authentication_guichet_xml_date_added,assertion_response_xml,assertion_response_date_added,date_modified) VALUES (:pshealthid,:authentication_guichet_xml,NOW(),:assertion_response_xml,NOW(),NOW())");
+	$req1 = $OPC->prepare("INSERT INTO doctor_pid (doctor_id, pshealthid, authentication_guichet_xml, authentication_guichet_xml_date_added, assertion_response_xml, assertion_response_date_added, date_modified) VALUES (:doctor_id, :pshealthid,:authentication_guichet_xml,NOW(),:assertion_response_xml,NOW(),NOW())");
 
 	$req1->execute(array(
+	'doctor_id' => $doctor_id,	
 	'pshealthid' => $psEHealthID,	
 	'authentication_guichet_xml' =>$doc->saveXML(),
 	'assertion_response_xml' => $response
@@ -609,8 +600,8 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, TRUE);
 curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 curl_setopt($ch, CURLOPT_URL, $service_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');//ok
-curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
+curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');//ok
+curl_setopt($ch, CURLOPT_CAINFO,  'certificats.pem');
 curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 
 curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
@@ -644,7 +635,7 @@ file_put_contents('logs/respondeCNS.xml', $response);
 $lastInsertId = $OPC->lastInsertId();
 if ($lastInsertId) {
 // Effectuer la mise à jour en utilisant l'identifiant récupéré
-$req2 = $OPC->prepare("UPDATE pid SET authn_ccss_xml = :authn_ccss_xml,authn_ccss_date_added=NOW(),ccss_token=:ccss_token,ccss_token_date_added=NOW() WHERE pid_id = :lastInsertId");
+$req2 = $OPC->prepare("UPDATE doctor_pid SET authn_ccss_xml = :authn_ccss_xml,authn_ccss_date_added=NOW(),ccss_token=:ccss_token,ccss_token_date_added=NOW() WHERE pid_id = :lastInsertId");
 
 	$req2->execute(array(
 		'authn_ccss_xml' => $a,
@@ -833,8 +824,8 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, TRUE);
 curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 curl_setopt($ch, CURLOPT_URL, $service_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');
-curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
+curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');
+curl_setopt($ch, CURLOPT_CAINFO,  'certificats.pem');
 curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -878,7 +869,7 @@ if ($nodes->length > 0) {
 }
 
  if ($lastInsertId) {
-$req2 = $OPC->prepare("UPDATE pid SET simulation_xml = :simulation_xml,simulation_response_xml=:simulation_response_xml,id_memoire_honoraire=:id_memoire_honoraire,id_externe_prestation=:id_externe_prestation,id_response_simulation=:id_response_simulation,idresponsesimulation_xml_date_added=NOW() WHERE pid_id = :lastInsertId");
+$req2 = $OPC->prepare("UPDATE doctor_pid SET simulation_xml = :simulation_xml,simulation_response_xml=:simulation_response_xml,id_memoire_honoraire=:id_memoire_honoraire,id_externe_prestation=:id_externe_prestation,id_response_simulation=:id_response_simulation,idresponsesimulation_xml_date_added=NOW() WHERE pid_id = :lastInsertId");
 
 $req2->execute(array(
 	'simulation_xml' => $a,

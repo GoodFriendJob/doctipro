@@ -34,10 +34,9 @@ function ConnexionBdd($var1,$var2,$var3,$var4)
 
 	return $OPC;
 }
-function getCertificatGuichet()
+function getCertificatGuichet($pshealthid_p12)
 {
-	global $cert_path;
-	$path_certificat_p12 = $cert_path . "MIPIT.p12";
+	$path_certificat_p12 = $pshealthid_p12;
 	$client_key_password = '7v4DfRK,G0Y0=?Cc';
 	if (!$cert_store = file_get_contents($path_certificat_p12)) {
 		echo "Error: Unable to read the cert file\n";

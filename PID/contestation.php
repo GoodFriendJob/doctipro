@@ -1,13 +1,12 @@
 <?php
-function contestation($identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,$identifiantAnomalieVar)
+function contestation($pshealthid_p12, $identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,$identifiantAnomalieVar)
 {
-	global $cert_path;
 	$OPC = ConnexionBdd('localhost','doctipro','doctipro_user','sMXNMDbpJoo1jyhF');
 
 	$wsuBodyId = 'id-8A64C6552EAFBF716616951123186195';
 	$sampleID = 'saml-dea5cdaee319ff3662a81ae1fea6936f';
 
-	$info = getCertificatGuichet();
+	$info = getCertificatGuichet($pshealthid_p12);
 	$privateKey = $info['privateKey'];
 	$publicCertWithoutTitle = $info['publicCertWithoutTitle'];
 
@@ -167,8 +166,8 @@ function contestation($identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,
 	curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_3);
 	curl_setopt($ch, CURLOPT_URL, $service_url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_SSLCERT, $cert_path . 'certificat.pem');//ok
-	curl_setopt($ch, CURLOPT_CAINFO,  $cert_path . 'certificats.pem');
+	curl_setopt($ch, CURLOPT_SSLCERT, 'certificat.pem');//ok
+	curl_setopt($ch, CURLOPT_CAINFO,  'certificats.pem');
 	curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'pem');
 	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -196,7 +195,7 @@ function contestation($identifiantReponseSimulationVar,$CCss,$WsuID,$pshealthid,
 	}
 	file_put_contents('logs/responseCNSBusinessCallContestation.xml', $response);
 
-	$req2 = $OPC->prepare("UPDATE pid 
+	$req2 = $OPC->prepare("UPDATE doctor_pid 
 		SET validation_xml = :validation_xml,
 			validation_response_xml = :validation_response_xml,
 			validation_response_xml_date_added = NOW() 

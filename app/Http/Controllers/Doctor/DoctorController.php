@@ -8,6 +8,7 @@ use App\Models\Appointment;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Doctor;
+use App\Models\DoctorPID;
 use App\Models\DoctorSubscription;
 use App\Models\Expertise;
 use App\Models\Hospital;
@@ -194,13 +195,11 @@ class DoctorController extends Controller
         return view('doctor.doctor.doctor_schedule', compact('doctor'));
     }
 
-    public function pid()
+    public function pid_settings()
     {
-        echo 'test'; exit;
         $doctor = Doctor::where('user_id', auth()->user()->id)->first();
-        $doctor->workingHours = WorkingHour::where('doctor_id', $doctor->id)->get();
-        $doctor->firstHours = WorkingHour::where('doctor_id', $doctor->id)->first();
-        return view('doctor.doctor.doctor_pid', compact('doctor'));
+        $histories = DoctorPID::where('doctor_id', $doctor->id)->get();
+        return view('doctor.doctor.doctor_pid_settings', compact('doctor', 'histories'));
     }
 
     public function doctor_profile()

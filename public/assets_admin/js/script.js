@@ -587,3 +587,7 @@ $(function() {
     }
   }
 });
+function displayFileName() {
+  var fileInput = document.getElementById('pshealthid_p12');
+  $('#fileNameLabel').html(fileInput.files.length > 0 ? '<i class="fa fa-file-powerpoint"></i> '+fileInput.files[0].name : "No file chosen");
+}

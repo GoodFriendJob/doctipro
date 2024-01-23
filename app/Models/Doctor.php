@@ -11,13 +11,18 @@ class Doctor extends Model
 
     protected $table = 'doctor';
 
-    protected $fillable = ['name','is_filled','treatment_id','category_id','custom_timeslot','dob','gender','expertise_id','timeslot','start_time','end_time','hospital_id','image','user_id','desc','education','certificate','appointment_fees','experience','since','status','based_on','commission_amount','is_popular','subscription_status','language'];
+    protected $fillable = ['name','is_filled','treatment_id','category_id','custom_timeslot','dob','gender','expertise_id','timeslot','start_time','end_time','hospital_id','image','user_id','desc','education','certificate','appointment_fees','experience','since','status','based_on','commission_amount','is_popular','subscription_status','language','pshealthid','pshealthid_p12'];
 
-    protected $appends = ['fullImage','rate','review'];
+    protected $appends = ['fullImage', 'fullP12Path', 'rate','review'];
 
     protected function getFullImageAttribute()
     {
-        return url('images/upload').'/'.$this->image;
+        return url('uploads/doctor/avatar').'/'.$this->image;
+    }
+
+    protected function getFullP12Path()
+    {
+        return url('uploads/doctor/ehealth_p12').'/'.$this->pshealthid_p12;
     }
 
     public function expertise()

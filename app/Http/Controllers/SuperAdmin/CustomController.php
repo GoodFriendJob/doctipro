@@ -47,6 +47,25 @@ class CustomController extends Controller
         }
     }
 
+    public function ext_fileUpload($path, $image)
+    {
+        $file = $image;
+        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $path = public_path() . $path;
+        $file->move($path, $fileName);
+        return $fileName;
+    }
+
+    public function ext_deleteFile($path, $file_name)
+    {
+        if ($file_name != 'prod_default.png' && $file_name != 'defaultUser.png') {
+            if (File::exists(public_path($path . $file_name))) {
+                File::delete(public_path($path . $file_name));
+            }
+            return true;
+        }
+    }
+
     public function display_category($id)
     {
         $categories = Category::where('treatment_id', $id)->get();

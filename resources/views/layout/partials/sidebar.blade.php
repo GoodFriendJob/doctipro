@@ -408,8 +408,8 @@
                 </a>
             </li>
             @endcan
-            <li class="{{ $activePage == 'pid' ? 'active' : '' }}">
-                <a href="{{ url('pid') }}">
+            <li class="{{ $activePage == 'pid_settings' ? 'active' : '' }}">
+                <a href="{{ url('pid_settings') }}">
                     <i class="fa fa-credit-card"></i>
                     <span>{{__('PID')}}</span>
                 </a>
